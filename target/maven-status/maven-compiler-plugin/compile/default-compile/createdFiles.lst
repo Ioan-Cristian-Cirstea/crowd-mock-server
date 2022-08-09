@@ -1,0 +1,8 @@
+ro/esolutions/crowdmockserver/services/CrowdUserService.class
+ro/esolutions/crowdmockserver/json/JsonLink.class
+ro/esolutions/crowdmockserver/CrowdMockServerApplication.class
+ro/esolutions/crowdmockserver/json/JsonUserSummary.class
+ro/esolutions/crowdmockserver/json/JsonUserList.class
+ro/esolutions/crowdmockserver/entities/CrowdUser.class
+ro/esolutions/crowdmockserver/repositories/CrowdUserRepository.class
+ro/esolutions/crowdmockserver/controllers/SearchController.class
