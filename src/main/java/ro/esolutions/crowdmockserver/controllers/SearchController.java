@@ -13,7 +13,7 @@ import ro.esolutions.crowdmockserver.services.CrowdUserService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/rest/usermanagement/1/search")
+@RequestMapping("/crowd/rest/usermanagement/1/search")
 public class SearchController {
     private final CrowdUserService crowdUserService;
     @GetMapping
@@ -21,7 +21,6 @@ public class SearchController {
         if (!entityType.equals("user"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
         JsonUserList userList = crowdUserService.getAllUsers();
-        System.out.println(userList);
 
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }

@@ -1,8 +1,15 @@
 ro/esolutions/crowdmockserver/services/CrowdUserService.class
 ro/esolutions/crowdmockserver/json/JsonLink.class
-ro/esolutions/crowdmockserver/CrowdMockServerApplication.class
 ro/esolutions/crowdmockserver/json/JsonUserSummary.class
-ro/esolutions/crowdmockserver/json/JsonUserList.class
 ro/esolutions/crowdmockserver/entities/CrowdUser.class
 ro/esolutions/crowdmockserver/repositories/CrowdUserRepository.class
+ro/esolutions/crowdmockserver/controllers/UserController.class
+ro/esolutions/crowdmockserver/json/JsonValidationFactors.class
+ro/esolutions/crowdmockserver/controllers/SessionController.class
+ro/esolutions/crowdmockserver/json/JsonUserDetails.class
+ro/esolutions/crowdmockserver/json/JsonUser.class
+ro/esolutions/crowdmockserver/json/JsonAuthenticateResponse.class
+ro/esolutions/crowdmockserver/CrowdMockServerApplication.class
+ro/esolutions/crowdmockserver/json/JsonUserList.class
+ro/esolutions/crowdmockserver/json/JsonAuthenticateRequest.class
 ro/esolutions/crowdmockserver/controllers/SearchController.class

@@ -10,15 +10,18 @@ import ro.esolutions.crowdmockserver.services.CrowdUserService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/rest/usermanagement/1/user")
+@RequestMapping("/crowd/rest/usermanagement/1/user")
 public class UserController {
     private final CrowdUserService crowdUserService;
 
     @GetMapping
     public ResponseEntity<JsonUserDetails> getUser(@RequestParam(value = "username", defaultValue = "") String username) {
         if (username.equals(""))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 
-        return new ResponseEntity<>(crowdUserService.getUserByUsername(username), HttpStatus.OK);
+        JsonUserDetails userDetails = crowdUserService.getUserByUsername(username);
+        if (userDetails == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        return new ResponseEntity<>(userDetails, HttpStatus.OK);
     }
 }
