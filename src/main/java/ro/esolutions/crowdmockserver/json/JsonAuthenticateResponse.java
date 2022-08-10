@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
+import ro.esolutions.crowdmockserver.entities.Token;
 
 import java.util.UUID;
 
@@ -20,11 +21,19 @@ public class JsonAuthenticateResponse {
     private long created_date;
     private long expire_date;
 
-    public JsonAuthenticateResponse(String  username) {
+    public JsonAuthenticateResponse(String username) {
         this.token = UUID.randomUUID().toString();
         this.user = new JsonUser(username);
         this.link = new JsonLink(username);
         this.created_date = System.currentTimeMillis();
         this.expire_date = this.created_date + JsonAuthenticateResponse.EXPIRATION_DURATION_HOURS * 8600 * 1000;
+    }
+
+    public JsonAuthenticateResponse(String username, Token token) {
+        this.token = token.getToken();
+        this.user = new JsonUser(username);
+        this.link = new JsonLink(username);
+        this.created_date = token.getCreatedDate();
+        this.expire_date = token.getExpireDate();
     }
 }

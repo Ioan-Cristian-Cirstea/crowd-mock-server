@@ -19,10 +19,9 @@ public class SessionController {
                                                                      @RequestParam(value = "validate-password", defaultValue = "true") boolean validatePassword)  {
         String username = authenticateRequest.getUsername();
         String password = authenticateRequest.getPassword();
-        System.out.println(username + " " + password);
         if (username == null || password == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
-        JsonAuthenticateResponse authenticateResponse = crowdUserService.getUserByUsernameAndPassword(username, password);
+        JsonAuthenticateResponse authenticateResponse = crowdUserService.getJsonAuthenticateResponse(username, password);
         if (authenticateResponse == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
         return new ResponseEntity<>(authenticateResponse, HttpStatus.CREATED);

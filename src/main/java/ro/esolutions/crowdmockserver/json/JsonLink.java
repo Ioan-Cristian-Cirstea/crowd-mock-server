@@ -14,6 +14,6 @@ public class JsonLink {
     private final String ref = "self";
 
     public JsonLink(String username) {
-        this.href = "http://crowd.esolutions.ro/rest/usermanagement/1/user?username=" + username;
+        this.href = "http://crowd.esolutions.ro/crowd/rest/usermanagement/1/user?username=" + username;
     }
 }

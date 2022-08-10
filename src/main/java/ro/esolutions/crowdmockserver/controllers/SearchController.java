@@ -20,7 +20,7 @@ public class SearchController {
     public ResponseEntity<JsonUserList> getAllUsers(@RequestParam(value = "entity-type", defaultValue = "") String entityType) {
         if (!entityType.equals("user"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
-        JsonUserList userList = crowdUserService.getAllUsers();
+        JsonUserList userList = crowdUserService.getAllUsersAsJsonList();
 
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }

@@ -3,10 +3,7 @@ package ro.esolutions.crowdmockserver.entities;
 import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,4 +18,6 @@ public class CrowdUser {
     private String password;
     @Column(nullable = false)
     private String email;
+    @OneToOne(mappedBy = "crowdUser")
+    private Token token;
 }

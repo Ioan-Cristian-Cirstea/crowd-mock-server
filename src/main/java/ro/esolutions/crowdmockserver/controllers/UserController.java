@@ -19,7 +19,7 @@ public class UserController {
         if (username.equals(""))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 
-        JsonUserDetails userDetails = crowdUserService.getUserByUsername(username);
+        JsonUserDetails userDetails = crowdUserService.getUserByUsernameAsJsonUserDetails(username);
         if (userDetails == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         return new ResponseEntity<>(userDetails, HttpStatus.OK);
