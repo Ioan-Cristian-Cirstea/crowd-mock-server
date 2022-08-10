@@ -7,4 +7,6 @@ import ro.esolutions.crowdmockserver.entities.Token;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, String> {
     Token findAllByCrowdUser_UUID(String userUUID);
+
+    void deleteAllByExpireDateIsLessThanEqual(long dateDeletion);
 }

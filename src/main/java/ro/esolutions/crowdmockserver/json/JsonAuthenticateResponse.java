@@ -3,6 +3,7 @@ package ro.esolutions.crowdmockserver.json;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import ro.esolutions.crowdmockserver.entities.Token;
 
@@ -29,7 +30,7 @@ public class JsonAuthenticateResponse {
         this.expire_date = this.created_date + JsonAuthenticateResponse.EXPIRATION_DURATION_HOURS * 8600 * 1000;
     }
 
-    public JsonAuthenticateResponse(String username, Token token) {
+    public JsonAuthenticateResponse(String username, @NotNull Token token) {
         this.token = token.getToken();
         this.user = new JsonUser(username);
         this.link = new JsonLink(username);

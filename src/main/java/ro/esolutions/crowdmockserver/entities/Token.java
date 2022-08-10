@@ -20,7 +20,7 @@ public class Token {
     private long createdDate;
     @Column(nullable = false)
     private long expireDate;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "userUUID", referencedColumnName = "UUID")
     private CrowdUser crowdUser;
 

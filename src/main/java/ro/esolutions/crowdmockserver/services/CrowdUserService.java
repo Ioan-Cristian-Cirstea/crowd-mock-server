@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class CrowdUserService {
     private final CrowdUserRepository crowdUserRepository;
-    private final TokenRepository tokenRepository;
     private final TokenService tokenService;
     public JsonUserList getAllUsersAsJsonList() {
         List<CrowdUser> crowdUserList = crowdUserRepository.findAll();
@@ -38,7 +37,7 @@ public class CrowdUserService {
         CrowdUser crowdUser = crowdUserRepository.findAllByUsernameAndPassword(username, password);
         if (crowdUser == null)
             return null;
-        Token token = tokenRepository.findAllByCrowdUser_UUID(crowdUser.getUUID());
+        Token token = tokenService.findTokenByUserUUID(crowdUser.getUUID());
         if (token == null) {
             JsonAuthenticateResponse authenticateResponse = new JsonAuthenticateResponse(username);
             tokenService.saveToken(authenticateResponse.getToken(),
