@@ -8,7 +8,6 @@ import ro.esolutions.crowdmockserver.json.JsonAuthenticateResponse;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
 import ro.esolutions.crowdmockserver.json.JsonUserList;
 import ro.esolutions.crowdmockserver.repositories.CrowdUserRepository;
-import ro.esolutions.crowdmockserver.repositories.TokenRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
