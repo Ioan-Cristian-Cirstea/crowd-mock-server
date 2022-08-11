@@ -51,7 +51,20 @@ public class UserController {
     @PutMapping
     public ResponseEntity<Object> updateUser(@RequestBody JsonNewUserRequest jsonNewUserRequest,
                                                       @RequestParam(value = "username", defaultValue = "") String username) {
+        if (username.equals(""))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         HttpStatus httpStatus = crowdUserService.updateUser(jsonNewUserRequest, username);
+        if (httpStatus == HttpStatus.NOT_FOUND)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/password")
+    public ResponseEntity<Object> deleteUserPassword(@RequestParam(value = "username", defaultValue = "") String username) {
+        if (username.equals(""))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        HttpStatus httpStatus = crowdUserService.deleteUserPassword(username);
         if (httpStatus == HttpStatus.NOT_FOUND)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 

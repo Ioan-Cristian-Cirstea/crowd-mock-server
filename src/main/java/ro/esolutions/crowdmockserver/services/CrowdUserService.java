@@ -112,4 +112,14 @@ public class CrowdUserService {
 
         return HttpStatus.NO_CONTENT;
     }
+
+    public HttpStatus deleteUserPassword(String username) {
+        CrowdUser crowdUser = crowdUserRepository.findAllByUsername(username);
+        if (crowdUser == null)
+            return HttpStatus.NOT_FOUND;
+        crowdUser.setPassword("");
+        crowdUserRepository.save(crowdUser);
+
+        return HttpStatus.NO_CONTENT;
+    }
 }
