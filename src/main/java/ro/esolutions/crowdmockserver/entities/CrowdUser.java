@@ -1,23 +1,35 @@
 package ro.esolutions.crowdmockserver.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class CrowdUser {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String UUID;
-    @Column(nullable = false)
+    @Column(unique = true)
     private String username;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
+    private String firstName;
+    @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
+    private String displayName;
     @OneToOne(mappedBy = "crowdUser")
     private Token token;
 }

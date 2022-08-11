@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.esolutions.crowdmockserver.entities.CrowdUser;
 import ro.esolutions.crowdmockserver.entities.Token;
 import ro.esolutions.crowdmockserver.json.JsonAuthenticateResponse;
+import ro.esolutions.crowdmockserver.json.JsonNewUserRequest;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
 import ro.esolutions.crowdmockserver.json.JsonUserList;
 import ro.esolutions.crowdmockserver.repositories.CrowdUserRepository;
@@ -41,7 +42,7 @@ public class CrowdUserService {
         if (crowdUser == null)
             return null;
 
-        return new JsonUserDetails(username, crowdUser.getUUID(), crowdUser.getEmail());
+        return new JsonUserDetails(crowdUser);
     }
 
     public JsonAuthenticateResponse getJsonAuthenticateResponse(String username, String password) {
@@ -59,5 +60,34 @@ public class CrowdUserService {
             return authenticateResponse;
         }
         return new JsonAuthenticateResponse(username, token);
+    }
+
+    public JsonUserDetails addUser(JsonNewUserRequest jsonNewUserRequest) {
+        if (jsonNewUserRequest.getName() == null)
+            return null;
+        if (jsonNewUserRequest.getPassword() == null)
+            return null;
+        if (jsonNewUserRequest.getEmail() == null)
+            return null;
+        if (jsonNewUserRequest.getName().equals(""))
+            return null;
+        if (jsonNewUserRequest.getPassword().getValue().equals(""))
+            return null;
+        if (jsonNewUserRequest.getEmail().equals(""))
+            return null;
+        if (crowdUserRepository.findAllByUsername(jsonNewUserRequest.getName()) != null)
+            return null;
+
+        CrowdUser crowdUser = CrowdUser.builder()
+                .username(jsonNewUserRequest.getName())
+                .password(jsonNewUserRequest.getPassword().getValue())
+                .email(jsonNewUserRequest.getEmail())
+                .firstName(jsonNewUserRequest.getFirst_name())
+                .lastName(jsonNewUserRequest.getLast_name())
+                .displayName(jsonNewUserRequest.getDisplay_name())
+                .build();
+        crowdUserRepository.save(crowdUser);
+
+        return new JsonUserDetails(crowdUser);
     }
 }

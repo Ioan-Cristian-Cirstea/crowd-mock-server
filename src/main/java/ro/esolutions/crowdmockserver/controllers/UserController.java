@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ro.esolutions.crowdmockserver.json.JsonNewUserRequest;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
 import ro.esolutions.crowdmockserver.services.CrowdUserService;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
@@ -35,5 +36,14 @@ public class UserController {
         else
             httpStatus = HttpStatus.NO_CONTENT;
         return new ResponseEntity<>(responseMessage, httpStatus);
+    }
+
+    @PostMapping
+    public ResponseEntity<JsonUserDetails> addUser(@RequestBody JsonNewUserRequest jsonNewUserRequest) {
+        JsonUserDetails jsonUserDetails = crowdUserService.addUser(jsonNewUserRequest);
+        if (jsonUserDetails == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
+
+        return new ResponseEntity<>(jsonUserDetails, HttpStatus.CREATED);
     }
 }
