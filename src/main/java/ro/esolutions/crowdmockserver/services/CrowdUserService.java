@@ -104,10 +104,10 @@ public class CrowdUserService {
             crowdUser.setFirstName(jsonNewUserRequest.getFirst_name());
         if (checkString(jsonNewUserRequest.getLast_name()))
             crowdUser.setLastName(jsonNewUserRequest.getLast_name());
+        if (checkString(jsonNewUserRequest.getDisplay_name()))
+            crowdUser.setDisplayName(jsonNewUserRequest.getDisplay_name());
         if (checkString(jsonNewUserRequest.getEmail()))
             crowdUser.setEmail(jsonNewUserRequest.getEmail());
-        if (checkJsonPassword(jsonNewUserRequest.getPassword()))
-            crowdUser.setPassword(jsonNewUserRequest.getPassword().getValue());
         crowdUserRepository.save(crowdUser);
 
         return HttpStatus.NO_CONTENT;
