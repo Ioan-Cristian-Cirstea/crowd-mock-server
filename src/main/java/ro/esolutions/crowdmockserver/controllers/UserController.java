@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ro.esolutions.crowdmockserver.json.JsonNewUserRequest;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
+import ro.esolutions.crowdmockserver.json.JsonPassword;
 import ro.esolutions.crowdmockserver.services.CrowdUserService;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
 import ro.esolutions.crowdmockserver.utilities.ReturnJsonUserDetails;
@@ -65,6 +66,20 @@ public class UserController {
         if (username.equals(""))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         HttpStatus httpStatus = crowdUserService.deleteUserPassword(username);
+        if (httpStatus == HttpStatus.NOT_FOUND)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Object> updateUserPassword(@RequestBody JsonPassword jsonPassword,
+            @RequestParam(value = "username", defaultValue = "") String username) {
+        if (username.equals(""))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        HttpStatus httpStatus = crowdUserService.updateUserPassword(jsonPassword, username);
+        if (httpStatus == HttpStatus.BAD_REQUEST)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
         if (httpStatus == HttpStatus.NOT_FOUND)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 

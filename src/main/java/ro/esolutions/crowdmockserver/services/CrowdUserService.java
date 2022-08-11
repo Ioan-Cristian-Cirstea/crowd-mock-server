@@ -122,4 +122,15 @@ public class CrowdUserService {
 
         return HttpStatus.NO_CONTENT;
     }
+
+    public HttpStatus updateUserPassword(JsonPassword jsonPassword, String username) {
+        if (!checkJsonPassword(jsonPassword))
+            return HttpStatus.BAD_REQUEST;
+        CrowdUser crowdUser = crowdUserRepository.findAllByUsername(username);
+        if (crowdUser == null)
+            return HttpStatus.NOT_FOUND;
+        crowdUser.setPassword(jsonPassword.getValue());
+
+        return HttpStatus.NO_CONTENT;
+    }
 }
