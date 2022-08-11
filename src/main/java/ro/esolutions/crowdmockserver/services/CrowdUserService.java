@@ -1,16 +1,16 @@
 package ro.esolutions.crowdmockserver.services;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.esolutions.crowdmockserver.entities.CrowdUser;
 import ro.esolutions.crowdmockserver.entities.Token;
-import ro.esolutions.crowdmockserver.json.JsonAuthenticateResponse;
-import ro.esolutions.crowdmockserver.json.JsonNewUserRequest;
-import ro.esolutions.crowdmockserver.json.JsonUserDetails;
-import ro.esolutions.crowdmockserver.json.JsonUserList;
+import ro.esolutions.crowdmockserver.json.*;
 import ro.esolutions.crowdmockserver.repositories.CrowdUserRepository;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
+import ro.esolutions.crowdmockserver.utilities.ReturnJsonUserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,18 +62,21 @@ public class CrowdUserService {
         return new JsonAuthenticateResponse(username, token);
     }
 
-    public JsonUserDetails addUser(JsonNewUserRequest jsonNewUserRequest) {
-        if (jsonNewUserRequest.getName() == null)
+    private boolean checkString(String field) {
+        return field != null && !field.equals("");
+    }
+
+    private boolean checkJsonPassword(JsonPassword jsonPassword) {
+        return jsonPassword != null && jsonPassword.getValue() != null
+                && !jsonPassword.getValue().equals("");
+    }
+
+    public JsonUserDetails addUser(@NonNull JsonNewUserRequest jsonNewUserRequest) {
+        if (!checkString(jsonNewUserRequest.getName()))
             return null;
-        if (jsonNewUserRequest.getPassword() == null)
+        if (!checkJsonPassword(jsonNewUserRequest.getPassword()))
             return null;
-        if (jsonNewUserRequest.getEmail() == null)
-            return null;
-        if (jsonNewUserRequest.getName().equals(""))
-            return null;
-        if (jsonNewUserRequest.getPassword().getValue().equals(""))
-            return null;
-        if (jsonNewUserRequest.getEmail().equals(""))
+        if (!checkString(jsonNewUserRequest.getEmail()))
             return null;
         if (crowdUserRepository.findAllByUsername(jsonNewUserRequest.getName()) != null)
             return null;
@@ -89,5 +92,24 @@ public class CrowdUserService {
         crowdUserRepository.save(crowdUser);
 
         return new JsonUserDetails(crowdUser);
+    }
+
+    public HttpStatus updateUser(@NonNull JsonNewUserRequest jsonNewUserRequest, String username) {
+        CrowdUser crowdUser = crowdUserRepository.findAllByUsername(username);
+        if (crowdUser == null)
+            return HttpStatus.NOT_FOUND;
+        if (checkString(jsonNewUserRequest.getName()))
+            crowdUser.setUsername(jsonNewUserRequest.getName());
+        if (checkString(jsonNewUserRequest.getFirst_name()))
+            crowdUser.setFirstName(jsonNewUserRequest.getFirst_name());
+        if (checkString(jsonNewUserRequest.getLast_name()))
+            crowdUser.setLastName(jsonNewUserRequest.getLast_name());
+        if (checkString(jsonNewUserRequest.getEmail()))
+            crowdUser.setEmail(jsonNewUserRequest.getEmail());
+        if (checkJsonPassword(jsonNewUserRequest.getPassword()))
+            crowdUser.setPassword(jsonNewUserRequest.getPassword().getValue());
+        crowdUserRepository.save(crowdUser);
+
+        return HttpStatus.NO_CONTENT;
     }
 }

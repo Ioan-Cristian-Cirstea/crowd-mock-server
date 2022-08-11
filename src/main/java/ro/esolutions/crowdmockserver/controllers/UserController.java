@@ -9,6 +9,7 @@ import ro.esolutions.crowdmockserver.json.JsonNewUserRequest;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
 import ro.esolutions.crowdmockserver.services.CrowdUserService;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
+import ro.esolutions.crowdmockserver.utilities.ReturnJsonUserDetails;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,5 +46,15 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
 
         return new ResponseEntity<>(jsonUserDetails, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<Object> updateUser(@RequestBody JsonNewUserRequest jsonNewUserRequest,
+                                                      @RequestParam(value = "username", defaultValue = "") String username) {
+        HttpStatus httpStatus = crowdUserService.updateUser(jsonNewUserRequest, username);
+        if (httpStatus == HttpStatus.NOT_FOUND)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 }
