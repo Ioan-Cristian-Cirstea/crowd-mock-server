@@ -23,4 +23,8 @@ public class TokenService {
     public void deleteOldTokens() {
         tokenRepository.deleteAllByExpireDateIsLessThanEqual(System.currentTimeMillis());
     }
+
+    public void deleteTokensByUserUUID(String userUUID) {
+        tokenRepository.deleteAllByCrowdUser_UUID(userUUID);
+    }
 }

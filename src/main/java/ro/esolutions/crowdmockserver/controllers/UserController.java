@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ro.esolutions.crowdmockserver.json.JsonUserDetails;
 import ro.esolutions.crowdmockserver.services.CrowdUserService;
+import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,5 +24,16 @@ public class UserController {
         if (userDetails == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         return new ResponseEntity<>(userDetails, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseMessage> deleteUser(@RequestParam(value = "username", defaultValue = "") String username) {
+        ResponseMessage responseMessage = crowdUserService.deleteUser(username);
+        HttpStatus httpStatus;
+        if (responseMessage.getMessage().equals("User not found"))
+            httpStatus = HttpStatus.NOT_FOUND;
+        else
+            httpStatus = HttpStatus.NO_CONTENT;
+        return new ResponseEntity<>(responseMessage, httpStatus);
     }
 }
