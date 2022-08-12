@@ -21,11 +21,11 @@ public class ApplicationService {
         return new JsonApplicationList(applicationRepository.findAll());
     }
 
-    public Application getApplicationByName(String name) {
+    public Application getApplicationByName(final String name) {
         return applicationRepository.findAllByName(name);
     }
 
-    public HttpStatus addApplication(JsonNewApplicationRequest jsonNewApplicationRequest) {
+    public HttpStatus addApplication(final JsonNewApplicationRequest jsonNewApplicationRequest) {
         if (!checkNewApplicationRequest(jsonNewApplicationRequest))
             return HttpStatus.BAD_REQUEST;
         String name = jsonNewApplicationRequest.getName();
@@ -50,11 +50,27 @@ public class ApplicationService {
         return jsonPassword != null && checkString(jsonPassword.getValue());
     }
 
-    public HttpStatus deleteApplicationByName(String applicationName) {
+    public HttpStatus deleteApplicationByName(final String applicationName) {
         Application application = applicationRepository.findAllByName(applicationName);
         if (application == null)
             return HttpStatus.NOT_FOUND;
         applicationRepository.delete(application);
+
+        return HttpStatus.NO_CONTENT;
+    }
+
+    public HttpStatus updateApplicationByName(final JsonNewApplicationRequest jsonNewApplicationRequest,
+            final String applicationName) {
+        Application application = applicationRepository.findAllByName(applicationName);
+        if (application == null)
+            return HttpStatus.NOT_FOUND;
+        String name = jsonNewApplicationRequest.getName();
+        JsonPassword jsonPassword = jsonNewApplicationRequest.getPassword();
+        if (checkString(name))
+            application.setName(name);
+        if (checkString(jsonPassword.getValue()))
+            application.setPassword(jsonPassword.getValue());
+        applicationRepository.save(application);
 
         return HttpStatus.NO_CONTENT;
     }

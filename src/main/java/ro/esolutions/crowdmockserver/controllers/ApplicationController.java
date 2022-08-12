@@ -46,4 +46,16 @@ public class ApplicationController {
 
         return new ResponseEntity<>(null, httpStatus);
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateApplication(@RequestBody JsonNewApplicationRequest jsonNewApplicationRequest,
+            @RequestParam(value = "appname", defaultValue = "") String applicationName) {
+        if (applicationName.equals(""))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
+        HttpStatus httpStatus = applicationService.updateApplicationByName(jsonNewApplicationRequest, applicationName);
+        if (httpStatus == HttpStatus.NOT_FOUND)
+            throw new ResponseStatusException(httpStatus, "Not found");
+
+        return new ResponseEntity<>(null, httpStatus);
+    }
 }

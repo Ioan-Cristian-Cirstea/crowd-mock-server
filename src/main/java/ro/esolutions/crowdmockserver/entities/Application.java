@@ -1,6 +1,6 @@
 package ro.esolutions.crowdmockserver.entities;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
+@Data
 @NoArgsConstructor
 public class Application {
     @Id
