@@ -17,9 +17,7 @@ public class JsonUserList {
     private final List<JsonUserSummary> users = new ArrayList<>();
 
     public JsonUserList(List<String> usernames) {
-        for (String username: usernames) {
+        for (String username: usernames)
             users.add(new JsonUserSummary(username));
-        }
-        System.out.println(users);
     }
 }
