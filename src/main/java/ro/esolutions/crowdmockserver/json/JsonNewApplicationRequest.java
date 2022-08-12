@@ -8,11 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @NoArgsConstructor
-public class JsonNewUserRequest {
+public class JsonNewApplicationRequest {
     private String name;
     private JsonPassword password;
-    private String first_name;
-    private String last_name;
-    private String display_name;
-    private String email;
 }

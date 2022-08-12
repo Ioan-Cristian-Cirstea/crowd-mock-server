@@ -21,4 +21,9 @@ public class Application {
     private String name;
     @Column(nullable = false, unique = true)
     private String password;
+
+    public Application(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
