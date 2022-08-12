@@ -7,4 +7,4 @@ connect-to-db:
 
 .PHONY:
 clean:
-	mvn clean package
+	mvn clean

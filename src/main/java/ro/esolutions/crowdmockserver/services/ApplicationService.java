@@ -68,7 +68,7 @@ public class ApplicationService {
         JsonPassword jsonPassword = jsonNewApplicationRequest.getPassword();
         if (checkString(name))
             application.setName(name);
-        if (checkString(jsonPassword.getValue()))
+        if (checkJsonPassword(jsonPassword))
             application.setPassword(jsonPassword.getValue());
         applicationRepository.save(application);
 

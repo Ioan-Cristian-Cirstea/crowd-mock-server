@@ -21,6 +21,9 @@ public class Interceptor implements HandlerInterceptor {
     private final CheckCredentials checkCredentials;
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/error"))
+            return true;
         // Get credentials from header
         String authorization = request.getHeader("authorization");
         if (authorization == null)
@@ -42,7 +45,6 @@ public class Interceptor implements HandlerInterceptor {
             throw throwError();
         String username = decodedCredentials.substring(0, semicolonIndex);
         String password = decodedCredentials.substring(semicolonIndex + 1);
-        String requestURI = request.getRequestURI();
         if (requestURI.indexOf("appmanagement") != -1) {
             if (!checkCredentials.checkAdmin(username, password))
                 throw throwError();
