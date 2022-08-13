@@ -1,6 +1,5 @@
 package ro.esolutions.crowdmockserver.services;
 
-import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;

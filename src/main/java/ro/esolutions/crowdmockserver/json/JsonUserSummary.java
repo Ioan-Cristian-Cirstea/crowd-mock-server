@@ -14,7 +14,7 @@ public class JsonUserSummary {
     private String name;
 
     public JsonUserSummary(String username) {
-        this.link = new JsonLink(username);
+        this.link = new JsonLink("user", username);
         this.name = username;
     }
 }

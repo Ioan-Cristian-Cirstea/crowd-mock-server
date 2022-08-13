@@ -21,14 +21,14 @@ public class JsonUserDetails {
     private String email;
 
     public JsonUserDetails(String name, String key, String email) {
-        this.link = new JsonLink(name);
+        this.link = new JsonLink("user", name);
         this.key = key;
         this.email = email;
         this.name = name;
     }
 
     public JsonUserDetails(CrowdUser crowdUser) {
-        this.link = new JsonLink(crowdUser.getUsername());
+        this.link = new JsonLink("user", crowdUser.getUsername());
         this.name = crowdUser.getUsername();
         this.key = crowdUser.getUUID();
         this.first_name = crowdUser.getFirstName();

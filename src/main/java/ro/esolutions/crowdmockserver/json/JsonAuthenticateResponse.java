@@ -25,7 +25,7 @@ public class JsonAuthenticateResponse {
     public JsonAuthenticateResponse(String username) {
         this.token = UUID.randomUUID().toString();
         this.user = new JsonUser(username);
-        this.link = new JsonLink(username);
+        this.link = new JsonLink("user", username);
         this.created_date = System.currentTimeMillis();
         this.expire_date = this.created_date + JsonAuthenticateResponse.EXPIRATION_DURATION_HOURS * 8600 * 1000;
     }
@@ -33,7 +33,7 @@ public class JsonAuthenticateResponse {
     public JsonAuthenticateResponse(String username, @NotNull Token token) {
         this.token = token.getToken();
         this.user = new JsonUser(username);
-        this.link = new JsonLink(username);
+        this.link = new JsonLink("user", username);
         this.created_date = token.getCreatedDate();
         this.expire_date = token.getExpireDate();
     }
