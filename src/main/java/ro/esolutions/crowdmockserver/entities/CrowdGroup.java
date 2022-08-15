@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import ro.esolutions.crowdmockserver.json.JsonNewGroupRequest;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +24,8 @@ public class CrowdGroup {
     @Column
     private String description;
 
-    public CrowdGroup(final String name, final String description) {
-        this.name = name;
-        this.description = description;
+    public CrowdGroup(final JsonNewGroupRequest jsonNewGroupRequest) {
+        this.name = jsonNewGroupRequest.getName();
+        this.description = jsonNewGroupRequest.getDescription();
     }
 }

@@ -14,6 +14,6 @@ public class JsonLink {
     private final String ref = "self";
 
     public JsonLink(final String type, final String name) {
-        this.href = String.format("http://crowd.esolutions.ro/crowd/rest/usermanagement/1/%s?%sname=", type, type, name);
+        this.href = String.format("http://crowd.esolutions.ro/crowd/rest/usermanagement/1/%s?%sname=%s", type, type, name);
     }
 }

@@ -20,6 +20,7 @@ public class JsonGroupDetails {
 
     public JsonGroupDetails(final CrowdGroup crowdGroup) {
         this.name = crowdGroup.getName();
+        this.link = new JsonLink("group", this.name);
         this.description = crowdGroup.getDescription();
     }
 }
