@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ro.esolutions.crowdmockserver.services.CrowdUserCrowdGroupService;
 import ro.esolutions.crowdmockserver.utilities.Authorization;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
+import ro.esolutions.crowdmockserver.json.JsonGroupList;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,11 +17,23 @@ import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
 public class CrowdUserCrowdGroupController {
     private final CrowdUserCrowdGroupService crowdUserCrowdGroupService;
 
+    @GetMapping
+    public ResponseEntity<?> getUserGroups(@RequestParam(value = "username", defaultValue = "") String username,
+            @RequestParam(value = "groupname", defaultValue = "") String groupname,
+            @RequestHeader(name = "authorization") String authorizationHeader) {
+        Authorization authorization = new Authorization(authorizationHeader); 
+        JsonGroupList jsonGroupList = crowdUserCrowdGroupService.getUserGroups(authorization.getUsername(),
+                username, groupname);
+        if (jsonGroupList == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+
+        return new ResponseEntity(jsonGroupList, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> addUserToGroup(@RequestParam(value = "username", defaultValue = "") String username,
             @RequestParam(value = "groupname", defaultValue = "") String groupname,
             @RequestHeader(name = "authorization") String authorizationHeader) {
-        System.out.println("[1] " + username);
         Authorization authorization = new Authorization(authorizationHeader);
         HttpStatus httpStatus = crowdUserCrowdGroupService.addUserToGroup(authorization.getUsername(),
                 username, groupname);

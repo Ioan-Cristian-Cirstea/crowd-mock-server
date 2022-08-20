@@ -61,7 +61,7 @@ public class CrowdGroupService {
 
     public JsonGroupDetails updateCrowdGroup(String appname, String groupname,
             JsonNewGroupRequest jsonNewGroupRequest) {
-        CrowdGroup crowdGroup = getCrowdGroupByAppNameAndGroupName(appname, groupname);
+        CrowdGroup crowdGroup = getCrowdGroupByName(appname, groupname);
         if (crowdGroup == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
         updateCrowdGroupInfo(jsonNewGroupRequest, crowdGroup);
@@ -70,7 +70,7 @@ public class CrowdGroupService {
     }
 
     public HttpStatus deleteCrowdGroup(String appname, String groupname) {
-        CrowdGroup crowdGroup = getCrowdGroupByAppNameAndGroupName(appname, groupname);
+        CrowdGroup crowdGroup = getCrowdGroupByName(appname, groupname);
         if (crowdGroup == null)
             return HttpStatus.NOT_FOUND;
         applicationCrowdGroupRepository.deleteAllByCrowdGroup_UUID(crowdGroup.getUUID());
@@ -79,18 +79,8 @@ public class CrowdGroupService {
         return HttpStatus.NO_CONTENT;
     }
 
-    public CrowdGroup getCrowdGroupByAppNameAndGroupName(String appname, String groupname) {
-        Application application = applicationRepository.findAllByName(appname);
-        if (application == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
-        return crowdGroupRepository.findAllById(
-                applicationCrowdGroupRepository.findAllByApplicationUUID(application.getUUID())
-                    .stream()
-                    .map(applicationCrowdGroup -> applicationCrowdGroup.getCrowdGroup().getUUID())
-                    .collect(Collectors.toList()))
-            .stream()
-            .filter(group -> group.getName().equals(groupname))
-            .findFirst().orElse(null);
+    public List<CrowdGroup> getCrowdGroupsById(List<String> groupIDs) {
+        return crowdGroupRepository.findAllById(groupIDs);
     }
 
     private void updateCrowdGroupInfo(JsonNewGroupRequest jsonNewGroupRequest, CrowdGroup crowdGroup) {

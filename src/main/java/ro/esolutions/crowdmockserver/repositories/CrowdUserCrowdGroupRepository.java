@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface CrowdUserCrowdGroupRepository extends JpaRepository<CrowdUserCrowdGroup, String> {
     public CrowdUserCrowdGroup findByCrowdUser_UUIDAndCrowdGroup_UUID(String userUUID, String groupUUID);
+    public List<CrowdUserCrowdGroup> findAllByCrowdUser_UUID(String userUUID);
 }
 
