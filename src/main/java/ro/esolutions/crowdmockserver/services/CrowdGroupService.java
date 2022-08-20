@@ -9,7 +9,6 @@ import ro.esolutions.crowdmockserver.json.JsonNewGroupRequest;
 import ro.esolutions.crowdmockserver.entities.Application;
 import ro.esolutions.crowdmockserver.entities.CrowdGroup;
 import ro.esolutions.crowdmockserver.entities.ApplicationCrowdGroup;
-import ro.esolutions.crowdmockserver.entities.ApplicationCrowdGroupKey;
 import ro.esolutions.crowdmockserver.repositories.CrowdGroupRepository;
 import ro.esolutions.crowdmockserver.repositories.ApplicationRepository;
 import ro.esolutions.crowdmockserver.repositories.ApplicationCrowdGroupRepository;
@@ -28,10 +27,9 @@ public class CrowdGroupService {
     public CrowdGroup getCrowdGroupByName(String appname, String crowdGroupName) {
         Application application = applicationRepository.findAllByName(appname);
         List<ApplicationCrowdGroup> applicationCrowdGroupList = applicationCrowdGroupRepository
-            .findAllByApplicationCrowdGroupKey_Application_UUID(application.getUUID());
+            .findAllByApplicationUUID(application.getUUID());
         List<CrowdGroup> crowdGroupList = crowdGroupRepository.findAllById(applicationCrowdGroupList.stream()
                 .map(applicationCrowdGroup -> applicationCrowdGroup
-                    .getApplicationCrowdGroupKey()
                     .getCrowdGroup()
                     .getUUID())
                 .collect(Collectors.toList()));
@@ -41,10 +39,8 @@ public class CrowdGroupService {
 
     public JsonGroupDetails getCrowdGroupByNameAsJson(String appname, String crowdGroupName) {
         CrowdGroup crowdGroup = this.getCrowdGroupByName(appname, crowdGroupName);
-        if (crowdGroup == null)
-            return null;
-        
-        return new JsonGroupDetails(crowdGroup);
+
+        return crowdGroup == null ? null : new JsonGroupDetails(crowdGroup);
     }
 
     public HttpStatus addCrowdGroup(String appname, JsonNewGroupRequest jsonNewGroupRequest) {
@@ -56,9 +52,8 @@ public class CrowdGroupService {
         crowdGroup = crowdGroupRepository.save(new CrowdGroup(jsonNewGroupRequest));
         applicationCrowdGroupRepository.save(
                 new ApplicationCrowdGroup(
-                    new ApplicationCrowdGroupKey(
                             applicationRepository.findAllByName(appname),
-                            crowdGroup)));
+                            crowdGroup));
 
         return HttpStatus.CREATED;
     }

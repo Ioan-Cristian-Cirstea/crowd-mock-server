@@ -38,10 +38,10 @@ public class CrowdGroupController {
     public ResponseEntity<?> addGroup(@RequestBody(required = false) JsonNewGroupRequest jsonNewGroupRequest,
             @RequestHeader(name = "authorization", required = false) String authorizationHeader) {
         Authorization authorization = new Authorization(authorizationHeader);
+        // In this case, authorization.getUsername() represents the name of the application
         String applicationName = authorization.getUsername();
         if (jsonNewGroupRequest == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
-        // In this case, authorization.getUsername() represents the name of the application
         HttpStatus httpStatus = crowdGroupService.addCrowdGroup(applicationName, jsonNewGroupRequest);
         if (httpStatus == HttpStatus.BAD_REQUEST)
             throw new ResponseStatusException(httpStatus, "Bad request");
