@@ -79,7 +79,7 @@ public class CrowdGroupService {
         return HttpStatus.NO_CONTENT;
     }
 
-    private CrowdGroup getCrowdGroupByAppNameAndGroupName(String appname, String groupname) {
+    public CrowdGroup getCrowdGroupByAppNameAndGroupName(String appname, String groupname) {
         Application application = applicationRepository.findAllByName(appname);
         if (application == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");

@@ -12,8 +12,6 @@ import ro.esolutions.crowdmockserver.services.CrowdGroupService;
 import ro.esolutions.crowdmockserver.utilities.Authorization;
 import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
 
-import java.util.Base64;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/crowd/rest/usermanagement/1/group")
