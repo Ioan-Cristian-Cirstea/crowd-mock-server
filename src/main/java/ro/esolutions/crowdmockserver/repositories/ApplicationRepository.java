@@ -8,8 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, String> {
-    List<Application> findAll();
-    Application findAllByName(String name);
-    Application findAllByNameAndPassword(String name, String password);
-
+    public List<Application> findAll();
+    public Application findAllByName(String name);
+    public Application findAllByNameAndPassword(String name, String password);
 }

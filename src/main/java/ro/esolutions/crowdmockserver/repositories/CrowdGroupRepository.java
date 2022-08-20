@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CrowdGroupRepository extends JpaRepository<CrowdGroup, String> {
+    public CrowdGroup findByName(String groupname);
 }

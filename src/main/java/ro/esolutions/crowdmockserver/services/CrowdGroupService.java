@@ -57,4 +57,24 @@ public class CrowdGroupService {
 
         return HttpStatus.CREATED;
     }
+
+    public HttpStatus deleteCrowdGroup(String appname, String groupname) {
+        Application application = applicationRepository.findAllByName(appname);
+        if (application == null)
+            return HttpStatus.UNAUTHORIZED;
+        CrowdGroup crowdGroup = crowdGroupRepository.findAllById(
+                applicationCrowdGroupRepository.findAllByApplicationUUID(application.getUUID())
+                    .stream()
+                    .map(applicationCrowdGroup -> applicationCrowdGroup.getCrowdGroup().getUUID())
+                    .collect(Collectors.toList()))
+            .stream()
+            .filter(group -> group.getName().equals(groupname))
+            .findFirst().orElse(null);
+        if (crowdGroup == null)
+            return HttpStatus.NOT_FOUND;
+        applicationCrowdGroupRepository.deleteAllByCrowdGroup_UUID(crowdGroup.getUUID());
+        crowdGroupRepository.deleteById(crowdGroup.getUUID());
+
+        return HttpStatus.NO_CONTENT;
+    }
 }

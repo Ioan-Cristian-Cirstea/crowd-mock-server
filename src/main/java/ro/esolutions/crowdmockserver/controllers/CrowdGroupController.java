@@ -10,6 +10,7 @@ import ro.esolutions.crowdmockserver.json.JsonGroupDetails;
 import ro.esolutions.crowdmockserver.json.JsonNewGroupRequest;
 import ro.esolutions.crowdmockserver.services.CrowdGroupService;
 import ro.esolutions.crowdmockserver.utilities.Authorization;
+import ro.esolutions.crowdmockserver.utilities.ResponseMessage;
 
 import java.util.Base64;
 
@@ -49,5 +50,20 @@ public class CrowdGroupController {
         return new ResponseEntity(new JsonGroupDetails(
                     crowdGroupService.getCrowdGroupByName(applicationName, jsonNewGroupRequest.getName())),
                     HttpStatus.CREATED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteGroup(@RequestHeader(name = "authorization", required = false) String authorizationHeader,
+            @RequestParam(value = "groupname", defaultValue = "") String groupname) {
+            if (authorizationHeader == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            Authorization authorization = new Authorization(authorizationHeader);
+            HttpStatus httpStatus = crowdGroupService.deleteCrowdGroup(authorization.getUsername(), groupname);
+            if (httpStatus == HttpStatus.UNAUTHORIZED)
+                throw new ResponseStatusException(httpStatus, "Unauthorized");
+            if (httpStatus == HttpStatus.NOT_FOUND)
+                throw new ResponseStatusException(httpStatus, "Not found");
+
+            return new ResponseEntity(new ResponseMessage("Group deleted"), httpStatus);
     }
 }

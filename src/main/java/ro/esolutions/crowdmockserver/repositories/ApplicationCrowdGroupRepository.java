@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ApplicationCrowdGroupRepository extends JpaRepository<ApplicationCrowdGroup, String> {
     public List<ApplicationCrowdGroup> findAllByApplicationUUID(String applicationUUID);
+    public void deleteAllByCrowdGroup_UUID(String groupUUID);
 }
