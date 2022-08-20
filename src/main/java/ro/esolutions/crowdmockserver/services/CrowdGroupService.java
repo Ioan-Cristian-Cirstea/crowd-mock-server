@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ro.esolutions.crowdmockserver.json.JsonGroupDetails;
 import ro.esolutions.crowdmockserver.json.JsonNewGroupRequest;
 import ro.esolutions.crowdmockserver.entities.Application;
@@ -58,11 +59,31 @@ public class CrowdGroupService {
         return HttpStatus.CREATED;
     }
 
+    public JsonGroupDetails updateCrowdGroup(String appname, String groupname,
+            JsonNewGroupRequest jsonNewGroupRequest) {
+        CrowdGroup crowdGroup = getCrowdGroupByAppNameAndGroupName(appname, groupname);
+        if (crowdGroup == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+        updateCrowdGroupInfo(jsonNewGroupRequest, crowdGroup);
+
+        return new JsonGroupDetails(crowdGroup);
+    }
+
     public HttpStatus deleteCrowdGroup(String appname, String groupname) {
+        CrowdGroup crowdGroup = getCrowdGroupByAppNameAndGroupName(appname, groupname);
+        if (crowdGroup == null)
+            return HttpStatus.NOT_FOUND;
+        applicationCrowdGroupRepository.deleteAllByCrowdGroup_UUID(crowdGroup.getUUID());
+        crowdGroupRepository.deleteById(crowdGroup.getUUID());
+
+        return HttpStatus.NO_CONTENT;
+    }
+
+    private CrowdGroup getCrowdGroupByAppNameAndGroupName(String appname, String groupname) {
         Application application = applicationRepository.findAllByName(appname);
         if (application == null)
-            return HttpStatus.UNAUTHORIZED;
-        CrowdGroup crowdGroup = crowdGroupRepository.findAllById(
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        return crowdGroupRepository.findAllById(
                 applicationCrowdGroupRepository.findAllByApplicationUUID(application.getUUID())
                     .stream()
                     .map(applicationCrowdGroup -> applicationCrowdGroup.getCrowdGroup().getUUID())
@@ -70,11 +91,12 @@ public class CrowdGroupService {
             .stream()
             .filter(group -> group.getName().equals(groupname))
             .findFirst().orElse(null);
-        if (crowdGroup == null)
-            return HttpStatus.NOT_FOUND;
-        applicationCrowdGroupRepository.deleteAllByCrowdGroup_UUID(crowdGroup.getUUID());
-        crowdGroupRepository.deleteById(crowdGroup.getUUID());
+    }
 
-        return HttpStatus.NO_CONTENT;
+    private void updateCrowdGroupInfo(JsonNewGroupRequest jsonNewGroupRequest, CrowdGroup crowdGroup) {
+        if (jsonNewGroupRequest.getName() != null)
+            crowdGroup.setName(jsonNewGroupRequest.getName());
+        if (jsonNewGroupRequest.getDescription() != null)
+            crowdGroup.setDescription(jsonNewGroupRequest.getDescription());
     }
 }

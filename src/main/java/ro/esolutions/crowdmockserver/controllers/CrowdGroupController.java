@@ -52,6 +52,18 @@ public class CrowdGroupController {
                     HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<?> updateGroup(@RequestBody(required = false) JsonNewGroupRequest jsonNewGroupRequest,
+            @RequestHeader(name = "authorization", required = false) String authorizationHeader,
+            @RequestParam(value = "groupname", defaultValue = "") String groupname) {
+       Authorization authorization = new Authorization(authorizationHeader);
+       if (jsonNewGroupRequest == null)
+           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request");
+
+       return new ResponseEntity(crowdGroupService.updateCrowdGroup(authorization.getUsername(), groupname,
+                   jsonNewGroupRequest), HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteGroup(@RequestHeader(name = "authorization", required = false) String authorizationHeader,
             @RequestParam(value = "groupname", defaultValue = "") String groupname) {
